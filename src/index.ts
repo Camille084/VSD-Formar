@@ -1,30 +1,32 @@
-import express from "express";
+
+import express, {json} from "express";
 import { sequelize } from "./config/database";
-import User from "./models/User";
+import { usersRouter } from "./routes/userRoutes";
+
 
 const app = express();
 const port = 3000;
 
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+app.use(json());
+
+app.use(usersRouter);
+
 
 
 
 main()
 
+
+
 async function main() {
   if (require.main === module) {
-    await sequelize.sync({ force: true }).then(() =>{
+    await sequelize.sync({ force: true }).then(() => {
       console.log("Database is synced");
-      app.listen(port,()=> 
-      console.log('listening at http:localhost:${port}'),
+      app.listen(port, () =>
+        console.log(`Listening at http://localhost:${port}`),
       );
     });
+  }
 
-// criar usuario 
-const user = await User.create({ name: 'Alice', email: 'alice@gmail.com' });
-console.log("Usuario criado:", user.toJSON()); 
- }
 }
